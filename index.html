@@ -3,12 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <!-- Evitar Cache -->
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
-
     <title>Painel Admin - Carta Mestre</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,7 +18,7 @@
         .header { background-color: #0F172A; color: #FFF; padding: 20px; text-align: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 10; display: flex; justify-content: space-between; align-items: center; }
         .header h1 { font-size: 1.2rem; font-weight: 700; width: 100%; text-align: center; }
         
-        /* Menus e Ferramentas */
+        /* Menus */
         .toolbar { background: #FFF; padding: 15px 20px; border-bottom: 1px solid #E2E8F0; display: flex; flex-direction: column; gap: 15px; }
         .menu-tabs { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
         
@@ -32,79 +26,59 @@
         .tab-btn.active { background: #3B82F6; color: #FFF; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3); }
         .tab-btn:hover:not(.active) { background: #E2E8F0; }
         
+        .tab-btn-pendentes { background: #F59E0B; color: white; }
+        .tab-btn-pendentes.active { background: #D97706; }
         .tab-btn-approve { background: #10B981; color: white; }
-        .tab-btn-approve:hover { background: #059669; }
-        .tab-btn-export { background: #6366F1; color: white; }
-        .tab-btn-export:hover { background: #4F46E5; }
-        .tab-btn-email { background: #D97706; color: white; }
-        .tab-btn-email:hover { background: #B45309; }
         .tab-btn-refresh { background: #64748B; color: white; }
-        .tab-btn-refresh:hover { background: #475569; }
 
         .container { padding: 20px; max-width: 850px; margin: 0 auto; }
         
         /* Estatísticas */
         .stats-row { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .stat-card { flex: 1; min-width: 150px; background: #FFF; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #E2E8F0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .stat-card { flex: 1; min-width: 130px; background: #FFF; padding: 20px; border-radius: 12px; text-align: center; border: 1px solid #E2E8F0; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .stat-value { font-size: 1.8rem; font-weight: 700; color: #3B82F6; }
-        .stat-label { font-size: 0.85rem; color: #64748B; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 5px; }
+        .stat-label { font-size: 0.85rem; color: #64748B; font-weight: 600; text-transform: uppercase; margin-top: 5px; }
 
-        /* Pesquisa */
         .search-container { position: relative; margin-bottom: 20px; }
         .search-container i { position: absolute; left: 15px; top: 15px; color: #94A3B8; }
-        .search-bar { width: 100%; padding: 14px 15px 14px 45px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 1rem; outline: none; transition: 0.2s; background: #FFF; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .search-bar { width: 100%; padding: 14px 15px 14px 45px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 1rem; outline: none; transition: 0.2s; background: #FFF; }
         .search-bar:focus { border-color: #3B82F6; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2); }
 
-        /* Cartões de Utilizador */
-        .user-card { background: #FFF; border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid #E2E8F0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.2s; }
-        .user-card:hover { border-color: #CBD5E1; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
-        
+        .user-card { background: #FFF; border-radius: 12px; padding: 20px; margin-bottom: 15px; border: 1px solid #E2E8F0; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         .user-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; border-bottom: 1px solid #F1F5F9; padding-bottom: 15px; }
-        .user-info { flex: 1; }
         .user-name { font-weight: 700; font-size: 1.1rem; color: #0F172A; display: flex; align-items: center; gap: 8px; }
         .user-detail { font-size: 0.9rem; color: #64748B; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
-        .user-meta { font-size: 0.8rem; color: #94A3B8; margin-top: 6px; display: flex; gap: 12px; align-items: center; }
         
         .user-actions { display: flex; gap: 8px; }
-        .btn-icon { width: 32px; height: 32px; border-radius: 8px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+        .btn-icon { width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer; transition: 0.2s; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;}
         .btn-edit { background: #F1F5F9; color: #475569; }
-        .btn-edit:hover { background: #E2E8F0; color: #1E293B; }
         .btn-delete { background: #FEE2E2; color: #DC2626; }
-        .btn-delete:hover { background: #FECACA; color: #991B1B; }
 
-        /* Badges */
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
         .status-active { background: #DCFCE7; color: #166534; }
         .status-inactive { background: #FEE2E2; color: #991B1B; }
-        .badge-dias { background: #E0E7FF; color: #4338CA; padding: 2px 6px; border-radius: 6px; font-size: 0.75rem; margin-left: 6px; font-weight: 700; }
+        .status-pending { background: #FEF3C7; color: #D97706; }
 
-        /* Secção Faturas */
+        /* Faturas */
         .invoice-section { border-radius: 10px; padding: 15px; margin-top: 12px; border-left: 4px solid transparent; background: #F8FAFC; }
         .invoice-pesados { border-left-color: #3B82F6; }
+        .invoice-pendente { border-left-color: #F59E0B; background: #FFFBEB; }
         .invoice-mecanica { border-left-color: #F97316; }
         
-        .invoice-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-        .invoice-pesados .invoice-title { color: #1D4ED8; }
-        .invoice-mecanica .invoice-title { color: #C2410C; }
-        
+        .invoice-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 12px; }
         .info-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #E2E8F0; }
         .info-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .info-label { color: #64748B; font-weight: 500; }
-        .info-val { font-weight: 600; color: #1E293B; display: flex; align-items: center; }
         .tx-id { font-family: monospace; background: #E2E8F0; padding: 2px 8px; border-radius: 6px; color: #0F172A; }
 
-        .actions { display: flex; gap: 10px; margin-top: 15px; }
-        .btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
-        .btn-cancel-pesados { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; }
-        .btn-cancel-pesados:hover { background: #DBEAFE; }
-        .btn-cancel-mecanica { background: #FFF7ED; color: #EA580C; border: 1px solid #FED7AA; }
-        .btn-cancel-mecanica:hover { background: #FFEDD5; }
+        .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        .btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .btn-approve-30 { background: #10B981; color: white; }
+        .btn-approve-7 { background: #3B82F6; color: white; }
+        .btn-reject { background: #FEE2E2; color: #DC2626; border: 1px solid #FECACA; }
+        .btn-cancel { background: #EFF6FF; color: #2563EB; border: 1px solid #BFDBFE; }
         
         .loading { text-align: center; padding: 60px 20px; color: #64748B; font-size: 1.1rem; }
-        .loading i { margin-bottom: 15px; color: #3B82F6; }
-
-        /* Aviso */
-        .alert-box { margin-top:15px; font-size:0.85rem; color:#991B1B; background:#FEF2F2; padding:12px; border-radius:8px; border: 1px solid #FECACA; display: flex; gap: 8px; align-items: flex-start; }
     </style>
 </head>
 <body>
@@ -113,57 +87,45 @@
         <h1><i class="fas fa-shield-alt"></i> Carta Mestre Admin</h1>
     </div>
 
-    <!-- BARRA DE FERRAMENTAS -->
     <div class="toolbar">
         <div class="menu-tabs">
-            <button class="tab-btn active" onclick="filtrarPorMenu('todos', this)">
-                <i class="fas fa-users"></i> Utilizadores
+            <button class="tab-btn active" onclick="filtrarPorMenu('todos', this)"><i class="fas fa-users"></i> Todos</button>
+            <button class="tab-btn tab-btn-pendentes" onclick="filtrarPorMenu('pendentes', this)">
+                <i class="fas fa-clock"></i> Pendentes (<span id="countPendentes">0</span>)
             </button>
-            <button class="tab-btn" onclick="filtrarPorMenu('faturas', this)">
-                <i class="fas fa-file-invoice-dollar"></i> Faturas Ativas
-            </button>
-            <button class="tab-btn tab-btn-approve" onclick="abrirMenuAprovar()">
-                <i class="fas fa-plus-circle"></i> Aprovar Dias
-            </button>
-            <button class="tab-btn tab-btn-email" onclick="abrirMenuEmailMassa()">
-                <i class="fas fa-paper-plane"></i> Email em Massa
-            </button>
-            <button class="tab-btn tab-btn-export" onclick="exportarCSV()">
-                <i class="fas fa-download"></i> Exportar
-            </button>
-            <button class="tab-btn tab-btn-refresh" onclick="carregarUsuarios()">
-                <i class="fas fa-sync-alt"></i> Atualizar
-            </button>
+            <button class="tab-btn" onclick="filtrarPorMenu('faturas', this)"><i class="fas fa-check-circle"></i> Ativos</button>
+            <button class="tab-btn tab-btn-approve" onclick="abrirMenuAprovar()"><i class="fas fa-plus-circle"></i> Manual</button>
+            <button class="tab-btn tab-btn-refresh" onclick="carregarUsuarios()"><i class="fas fa-sync-alt"></i></button>
         </div>
     </div>
 
     <div class="container">
-        <!-- Estatísticas -->
         <div class="stats-row">
             <div class="stat-card">
                 <div class="stat-value" id="totalUsers">0</div>
-                <div class="stat-label">Total de Clientes</div>
+                <div class="stat-label">Clientes</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value" id="activeUsers">0</div>
-                <div class="stat-label">Faturas Ativas</div>
+                <div class="stat-value" style="color: #10B981;" id="activeUsers">0</div>
+                <div class="stat-label">Ativos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color: #F59E0B;" id="pendingUsers">0</div>
+                <div class="stat-label">Pendentes</div>
             </div>
         </div>
 
-        <!-- Pesquisa -->
         <div class="search-container">
             <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" class="search-bar" placeholder="Pesquisar por Nome, ID da Transação, Email ou Telefone..." onkeyup="filtrarLista()">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Pesquisar por Nome, ID da Transação, Email..." onkeyup="filtrarLista()">
         </div>
 
-        <!-- Lista de Utilizadores -->
         <div id="usersList">
             <div class="loading"><i class="fas fa-spinner fa-spin fa-2x"></i><br>A carregar base de dados...</div>
         </div>
     </div>
 
     <script>
-        // CONFIGURAÇÕES DO SUPABASE
         const SUPABASE_URL = 'https://vhcioxwuombrqkhkipdh.supabase.co';
         const SUPABASE_KEY = 'sb_publishable_XW2XlyZRe0IOotl6fpRXGQ_w6_-32AF';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -171,409 +133,198 @@
         let todosUsuarios = [];
         let filtroAtual = 'todos';
 
-        // CARREGAR DADOS
         async function carregarUsuarios() {
-            document.getElementById('usersList').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin fa-2x"></i><br>A atualizar dados...</div>';
+            document.getElementById('usersList').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin fa-2x"></i><br>A atualizar...</div>';
             try {
-                const { data, error } = await supabaseClient
-                    .from('Utilizadores')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
+                const { data, error } = await supabaseClient.from('Utilizadores').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
                 todosUsuarios = data;
                 filtrarLista(); 
                 atualizarEstatisticas(data);
             } catch (error) {
-                Swal.fire('Erro de Conexão', 'Não foi possível carregar os dados. Verifique a internet.', 'error');
-                console.error(error);
+                Swal.fire('Erro de Conexão', 'Não foi possível carregar os dados.', 'error');
             }
         }
 
-        // FUNÇÕES PARA CÁLCULO DE DIAS E TEMPO
-        function calcularDiasRestantes(dataIso) {
-            if (!dataIso) return 0;
-            const hoje = new Date();
-            const expira = new Date(dataIso);
-            const diferencaTempo = expira.getTime() - hoje.getTime();
-            const diferencaDias = Math.ceil(diferencaTempo / (1000 * 3600 * 24));
-            return diferencaDias > 0 ? diferencaDias : 0;
-        }
-
-        function tempoAtras(dataIso) {
-            if (!dataIso) return 'Sem registo';
-            const segundos = Math.floor((new Date() - new Date(dataIso)) / 1000);
-            
-            let intervalo = segundos / 31536000;
-            if (intervalo > 1) return Math.floor(intervalo) + " anos atrás";
-            
-            intervalo = segundos / 2592000;
-            if (intervalo > 1) return Math.floor(intervalo) + " meses atrás";
-            
-            intervalo = segundos / 86400;
-            if (intervalo > 1) return Math.floor(intervalo) + " dias atrás";
-            
-            intervalo = segundos / 3600;
-            if (intervalo > 1) return Math.floor(intervalo) + " horas atrás";
-            
-            intervalo = segundos / 60;
-            if (intervalo > 1) return Math.floor(intervalo) + " minutos atrás";
-            
-            return "Agora mesmo";
-        }
-
-        // RENDERIZAR INTERFACE
         function renderizarLista(usuarios) {
             const listDiv = document.getElementById('usersList');
             listDiv.innerHTML = ''; 
 
             if(usuarios.length === 0) {
-                listDiv.innerHTML = '<div style="text-align:center; padding: 40px; color:#64748B;"><i class="fas fa-box-open fa-3x" style="color:#CBD5E1; margin-bottom:15px;"></i><br>Nenhum utilizador encontrado.</div>';
+                listDiv.innerHTML = '<div style="text-align:center; padding: 40px; color:#64748B;">Nenhum utilizador encontrado.</div>';
                 return;
             }
 
             usuarios.forEach(user => {
                 const agora = new Date();
+                
+                // Estados (Pesados)
                 const pesadosAtivo = user.assinatura_pesados && new Date(user.assinatura_pesados) > agora;
+                const pesadosPendente = user.id_transacao_pesados && !pesadosAtivo;
+                
+                // Estados (Mecânica)
                 const mecanicaAtiva = user.assinatura_mecanica && new Date(user.assinatura_mecanica) > agora;
-                
-                const diasPesados = calcularDiasRestantes(user.assinatura_pesados);
-                const diasMecanica = calcularDiasRestantes(user.assinatura_mecanica);
+                const mecanicaPendente = user.id_transacao_mecanica && !mecanicaAtiva;
 
-                const transIdPesados = user.id_transacao_pesados || user.id_transacao || 'N/D';
-                const transIdMecanica = user.id_transacao_mecanica || user.id_transacao || 'N/D';
-                const telefoneUser = user.numero || user.telefone || 'Sem Número';
-                const emailUser = user.email || user.correio || 'Sem Email';
-                const nomeUser = user.nome || 'Cliente Anónimo';
-                
-                const dataUltimoAcesso = user.ultimo_login ? user.ultimo_login : user.created_at;
-                const txtUltimoAcesso = user.ultimo_login ? 'Último login:' : 'Registo:';
+                const temAtivoOuPendente = pesadosAtivo || mecanicaAtiva || pesadosPendente || mecanicaPendente;
 
                 const card = document.createElement('div');
                 card.className = 'user-card';
                 
                 let htmlFaturas = '';
 
-                if (user.assinatura_pesados) {
+                // BLOCO PESADOS PENDENTE
+                if (pesadosPendente) {
+                    htmlFaturas += `
+                        <div class="invoice-section invoice-pendente">
+                            <div class="invoice-title" style="color: #D97706;"><i class="fas fa-exclamation-circle"></i> Pesados - Aguarda Aprovação</div>
+                            <div class="info-row">
+                                <span class="info-label">ID Transação</span>
+                                <span class="info-val tx-id">${user.id_transacao_pesados}</span>
+                            </div>
+                            <div class="actions">
+                                <button class="btn btn-approve-30" onclick="aprovarPendente('${user.id}', 'pesados', 30)"><i class="fas fa-check"></i> 30 Dias</button>
+                                <button class="btn btn-approve-7" onclick="aprovarPendente('${user.id}', 'pesados', 7)"><i class="fas fa-check"></i> 7 Dias</button>
+                                <button class="btn btn-reject" onclick="rejeitarPendente('${user.id}', 'pesados')"><i class="fas fa-times"></i> Rejeitar</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (pesadosAtivo) {
+                    // BLOCO PESADOS ATIVO
                     htmlFaturas += `
                         <div class="invoice-section invoice-pesados">
-                            <div class="invoice-title"><i class="fas fa-truck-moving"></i> Exames Pesados</div>
+                            <div class="invoice-title" style="color: #1D4ED8;"><i class="fas fa-truck-moving"></i> Exames Pesados (Ativo)</div>
                             <div class="info-row">
                                 <span class="info-label">ID Transação</span>
-                                <span class="info-val tx-id">${transIdPesados}</span>
+                                <span class="info-val tx-id">${user.id_transacao_pesados || 'Manual'}</span>
                             </div>
-                            <div class="info-row">
-                                <span class="info-label">Expira em</span>
-                                <span class="info-val">
-                                    ${formatarData(user.assinatura_pesados)}
-                                    ${pesadosAtivo ? `<span class="badge-dias">${diasPesados} dias</span>` : ''}
-                                </span>
-                            </div>
-                            <div class="info-row" style="border:none;">
-                                <span class="info-label">Estado</span>
-                                <span class="status-badge ${pesadosAtivo ? 'status-active' : 'status-inactive'}">${pesadosAtivo ? 'Ativo' : 'Expirado'}</span>
-                            </div>
-                            ${pesadosAtivo ? `
                             <div class="actions">
-                                <button class="btn btn-cancel-pesados" onclick="cancelarAssinatura('${user.id}', 'pesados')">
-                                    <i class="fas fa-ban"></i> Suspender Pesados
-                                </button>
-                            </div>` : ''}
+                                <button class="btn btn-cancel" onclick="suspenderAssinatura('${user.id}', 'pesados')"><i class="fas fa-ban"></i> Suspender Acesso</button>
+                            </div>
                         </div>
                     `;
                 }
 
-                if (user.assinatura_mecanica) {
+                // BLOCO MECÂNICA PENDENTE
+                if (mecanicaPendente) {
+                    htmlFaturas += `
+                        <div class="invoice-section invoice-pendente">
+                            <div class="invoice-title" style="color: #D97706;"><i class="fas fa-exclamation-circle"></i> Mecânica - Aguarda Aprovação</div>
+                            <div class="info-row">
+                                <span class="info-label">ID Transação</span>
+                                <span class="info-val tx-id">${user.id_transacao_mecanica}</span>
+                            </div>
+                            <div class="actions">
+                                <button class="btn btn-approve-30" onclick="aprovarPendente('${user.id}', 'mecanica', 30)"><i class="fas fa-check"></i> 30 Dias</button>
+                                <button class="btn btn-approve-7" onclick="aprovarPendente('${user.id}', 'mecanica', 7)"><i class="fas fa-check"></i> 7 Dias</button>
+                                <button class="btn btn-reject" onclick="rejeitarPendente('${user.id}', 'mecanica')"><i class="fas fa-times"></i> Rejeitar</button>
+                            </div>
+                        </div>
+                    `;
+                } else if (mecanicaAtiva) {
+                    // BLOCO MECÂNICA ATIVO
                     htmlFaturas += `
                         <div class="invoice-section invoice-mecanica">
-                            <div class="invoice-title"><i class="fas fa-cogs"></i> Módulo Mecânica</div>
-                            <div class="info-row">
-                                <span class="info-label">ID Transação</span>
-                                <span class="info-val tx-id">${transIdMecanica}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Expira em</span>
-                                <span class="info-val">
-                                    ${formatarData(user.assinatura_mecanica)}
-                                    ${mecanicaAtiva ? `<span class="badge-dias">${diasMecanica} dias</span>` : ''}
-                                </span>
-                            </div>
-                            <div class="info-row" style="border:none;">
-                                <span class="info-label">Estado</span>
-                                <span class="status-badge ${mecanicaAtiva ? 'status-active' : 'status-inactive'}">${mecanicaAtiva ? 'Ativo' : 'Expirado'}</span>
-                            </div>
-                            ${mecanicaAtiva ? `
+                            <div class="invoice-title" style="color: #C2410C;"><i class="fas fa-cogs"></i> Mecânica (Ativo)</div>
                             <div class="actions">
-                                <button class="btn btn-cancel-mecanica" onclick="cancelarAssinatura('${user.id}', 'mecanica')">
-                                    <i class="fas fa-ban"></i> Suspender Mecânica
-                                </button>
-                            </div>` : ''}
+                                <button class="btn btn-cancel" style="background:#FFF7ED; color:#EA580C; border-color:#FED7AA;" onclick="suspenderAssinatura('${user.id}', 'mecanica')"><i class="fas fa-ban"></i> Suspender</button>
+                            </div>
                         </div>
                     `;
                 }
 
-                if (!user.assinatura_pesados && !user.assinatura_mecanica) {
-                    htmlFaturas = `<div style="text-align:center; font-size:0.85rem; color:#94A3B8; padding:15px; border: 1px dashed #E2E8F0; border-radius: 8px; margin-top: 10px;">O cliente ainda não possui faturas registadas.</div>`;
+                if (!temAtivoOuPendente) {
+                    htmlFaturas = `<div style="text-align:center; font-size:0.85rem; color:#94A3B8; padding:15px; border: 1px dashed #E2E8F0; margin-top: 10px;">Sem assinaturas ou pedidos pendentes.</div>`;
                 }
+
+                let badgeHtml = '<span class="status-badge status-inactive">Inativo</span>';
+                if(pesadosAtivo || mecanicaAtiva) badgeHtml = '<span class="status-badge status-active">Ativo</span>';
+                if((pesadosPendente || mecanicaPendente) && !pesadosAtivo && !mecanicaAtiva) badgeHtml = '<span class="status-badge status-pending">Pendente</span>';
 
                 card.innerHTML = `
                     <div class="user-header">
-                        <div class="user-info">
-                            <div class="user-name">${nomeUser} <span class="status-badge ${(pesadosAtivo || mecanicaAtiva) ? 'status-active' : 'status-inactive'}">${(pesadosAtivo || mecanicaAtiva) ? 'Ativo' : 'Inativo'}</span></div>
-                            <div class="user-detail"><i class="fas fa-envelope" style="color:#94A3B8; width: 14px;"></i> ${emailUser}</div>
-                            <div class="user-detail"><i class="fas fa-phone-alt" style="color:#94A3B8; width: 14px;"></i> ${telefoneUser}</div>
-                            <div class="user-meta">
-                                <span><i class="far fa-clock"></i> <b>${txtUltimoAcesso}</b> ${tempoAtras(dataUltimoAcesso)}</span>
-                            </div>
+                        <div>
+                            <div class="user-name">${user.nome || 'Cliente Anónimo'} ${badgeHtml}</div>
+                            <div class="user-detail"><i class="fas fa-phone-alt"></i> ${user.numero || user.telefone || 'S/N'}</div>
                         </div>
                         <div class="user-actions">
-                            <button class="btn-icon btn-edit" title="Editar Utilizador" onclick="editarUsuario('${user.id}')"><i class="fas fa-pen"></i></button>
-                            <button class="btn-icon btn-delete" title="Eliminar Definitivamente" onclick="eliminarUsuario('${user.id}', '${nomeUser.replace(/'/g, "\\'")}')"><i class="fas fa-trash-alt"></i></button>
+                            <button class="btn-icon btn-edit" onclick="editarUsuario('${user.id}')"><i class="fas fa-pen"></i></button>
+                            <button class="btn-icon btn-delete" onclick="eliminarUsuario('${user.id}')"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                     ${htmlFaturas}
-                    ${user.mensagem_admin ? `<div class="alert-box"><i class="fas fa-exclamation-triangle" style="margin-top:2px;"></i> <div><b>Aviso de Admin:</b><br>${user.mensagem_admin}</div></div>` : ''}
                 `;
                 listDiv.appendChild(card);
             });
         }
 
-        // ==========================================
-        // FUNCIONALIDADES DE EMAIL EM MASSA
-        // ==========================================
-        
-        async function abrirMenuEmailMassa() {
-            const { value: opcao } = await Swal.fire({
-                title: 'Disparar Email em Massa',
-                text: 'Escolha o público-alvo para o envio:',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Todos os Utilizadores',
-                cancelButtonText: 'Inativos (+10 dias)',
-                confirmButtonColor: '#3B82F6',
-                cancelButtonColor: '#D97706',
-                footer: '<span style="color:#64748B; font-size:0.85rem;">Escolha qual grupo deseja selecionar automaticamente.</span>'
-            });
+        // FUNÇÕES DE APROVAÇÃO / REJEIÇÃO (NOVO FLUXO)
+        async function aprovarPendente(userId, modulo, dias) {
+            Swal.fire({ title: 'A processar aprovação...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            try {
+                const dataBase = new Date();
+                dataBase.setDate(dataBase.getDate() + dias);
+                const expDateISO = dataBase.toISOString();
 
-            // Se clicou em "Todos" (confirm) ou "Inativos" (cancel)
-            if (opcao !== undefined) {
-                let destinatarios = [];
-                let tituloGrupo = '';
+                const updateData = { mensagem_admin: null };
+                if (modulo === 'pesados') updateData.assinatura_pesados = expDateISO;
+                else updateData.assinatura_mecanica = expDateISO;
 
-                if (opcao === true) {
-                    // Todos
-                    destinarios = todosUsuarios.map(u => u.email || u.correio).filter(Boolean);
-                    tituloGrupo = 'Todos os Utilizadores';
-                } else {
-                    // Inativos há mais de 10 dias
-                    const agora = new Date();
-                    destinarios = todosUsuarios.filter(u => {
-                        const ultimaData = u.ultimo_login || u.created_at;
-                        if (!ultimaData) return false;
-                        const diasInativo = (agora - new Date(ultimaData)) / (1000 * 3600 * 24);
-                        return diasInativo >= 10;
-                    }).map(u => u.email || u.correio).filter(Boolean);
-                    tituloGrupo = 'Utilizadores Inativos (+10 dias)';
-                }
-
-                if (destinarios.length === 0) {
-                    return Swal.fire('Aviso', `Não foram encontrados emails válidos para o grupo: ${tituloGrupo}.`, 'warning');
-                }
-
-                comporMensagemEmail(destinarios, tituloGrupo);
-            }
-        }
-
-        async function comporMensagemEmail(listaEmails, grupoNome) {
-            const { value: formValues } = await Swal.fire({
-                title: `Enviar Email (${grupoNome})`,
-                html: `
-                    <div style="text-align: left; font-size: 0.85rem; color:#64748B; margin-bottom: 5px;">Destinatários selecionados: <b>${listaEmails.length} emails</b></div>
-                    <div style="text-align: left; font-size: 0.85rem; color:#64748B; margin-bottom: 5px;">Assunto do Email:</div>
-                    <input id="swal-assunto" class="swal2-input" placeholder="Ex: Novidades no Carta Mestre!" style="margin-top: 0; width:100%;">
-                    
-                    <div style="text-align: left; font-size: 0.85rem; color:#64748B; margin-top: 15px; margin-bottom: 5px;">Mensagem:</div>
-                    <textarea id="swal-corpo" class="swal2-textarea" placeholder="Escreva aqui o conteúdo da mensagem..." style="margin-top: 0; width:100%; height:120px;"></textarea>
-                `,
-                focusConfirm: false,
-                showCancelButton: true,
-                confirmButtonText: '<i class="fas fa-paper-plane"></i> Enviar Emails',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#10B981',
-                preConfirm: () => {
-                    return {
-                        assunto: document.getElementById('swal-assunto').value,
-                        corpo: document.getElementById('swal-corpo').value
-                    }
-                }
-            });
-
-            if (formValues) {
-                if (!formValues.assunto || !formValues.corpo) {
-                    return Swal.fire('Erro', 'Preencha o assunto e o corpo da mensagem.', 'error');
-                }
-
-                // Abre o cliente de email padrão do dispositivo (mailto) com cópia oculta (bcc) para disparar em massa
-                const bccList = listaEmails.join(',');
-                const mailtoLink = `mailto:?bcc=${encodeURIComponent(bccList)}&subject=${encodeURIComponent(formValues.assunto)}&body=${encodeURIComponent(formValues.corpo)}`;
+                await supabaseClient.from('Utilizadores').update(updateData).eq('id', userId);
                 
-                const linkTemp = document.createElement('a');
-                linkTemp.href = mailtoLink;
-                linkTemp.click();
-
-                Swal.fire('Pronto!', `O cliente de email foi aberto com ${listaEmails.length} destinatários em BCC para o grupo "${grupoNome}".`, 'success');
+                Swal.fire('Aprovado!', `O cliente recebeu acesso por ${dias} dias.`, 'success');
+                carregarUsuarios();
+            } catch (error) {
+                Swal.fire('Erro', 'Ocorreu um erro ao aprovar.', 'error');
             }
         }
 
-        // ==========================================
-        // OUTRAS FUNCIONALIDADES
-        // ==========================================
-
-        async function eliminarUsuario(userId, nome) {
-            const confirm = await Swal.fire({
-                title: 'Tem a Certeza?',
-                html: `Vai eliminar definitivamente o utilizador <b>${nome}</b>.<br><br><span style="color:#DC2626; font-size: 0.9rem;">Esta ação apagará todos os dados e não pode ser desfeita!</span>`,
-                icon: 'warning',
+        async function rejeitarPendente(userId, modulo) {
+            const { value: motivo } = await Swal.fire({
+                title: 'Rejeitar Pagamento',
+                input: 'text',
+                inputLabel: 'Motivo da rejeição:',
+                inputPlaceholder: 'Ex: O ID fornecido não é válido.',
                 showCancelButton: true,
                 confirmButtonColor: '#DC2626',
-                cancelButtonColor: '#64748B',
-                confirmButtonText: '<i class="fas fa-trash"></i> Sim, Eliminar!',
-                cancelButtonText: 'Cancelar'
+                confirmButtonText: 'Rejeitar Pagamento'
             });
 
+            if (motivo) {
+                Swal.fire({ title: 'A rejeitar...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                try {
+                    const updateData = { mensagem_admin: `⚠️ O seu pagamento foi rejeitado. Motivo: ${motivo}` };
+                    if (modulo === 'pesados') updateData.id_transacao_pesados = null;
+                    else updateData.id_transacao_mecanica = null;
+
+                    await supabaseClient.from('Utilizadores').update(updateData).eq('id', userId);
+                    Swal.fire('Rejeitado', 'O pedido foi apagado e o cliente notificado.', 'success');
+                    carregarUsuarios();
+                } catch (error) {
+                    Swal.fire('Erro', 'Ocorreu um erro ao rejeitar.', 'error');
+                }
+            }
+        }
+
+        async function suspenderAssinatura(userId, modulo) {
+            Swal.fire({ title: 'A suspender...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            try {
+                const updateData = {};
+                if (modulo === 'pesados') updateData.assinatura_pesados = null;
+                else updateData.assinatura_mecanica = null;
+
+                await supabaseClient.from('Utilizadores').update(updateData).eq('id', userId);
+                Swal.fire('Suspenso', 'O acesso foi retirado.', 'success');
+                carregarUsuarios();
+            } catch(e) { Swal.fire('Erro', '', 'error'); }
+        }
+
+        async function eliminarUsuario(userId) {
+            const confirm = await Swal.fire({ title: 'Tem a Certeza?', text: 'Vai eliminar definitivamente este utilizador.', icon: 'warning', showCancelButton: true, confirmButtonColor: '#DC2626', confirmButtonText: 'Sim, Eliminar' });
             if (confirm.isConfirmed) {
-                Swal.fire({ title: 'A apagar registos...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-                try {
-                    const { error } = await supabaseClient.from('Utilizadores').delete().eq('id', userId);
-                    if (error) throw error;
-                    
-                    Swal.fire('Eliminado!', 'Utilizador removido do sistema com sucesso.', 'success');
-                    carregarUsuarios(); 
-                } catch (error) {
-                    Swal.fire('Erro', 'Ocorreu um erro ao tentar eliminar o utilizador.', 'error');
-                    console.error(error);
-                }
-            }
-        }
-
-        async function editarUsuario(userId) {
-            const user = todosUsuarios.find(u => String(u.id) === String(userId));
-            
-            if (!user) {
-                Swal.fire('Erro', 'Não foi possível encontrar os dados deste utilizador na memória.', 'error');
-                return;
-            }
-
-            const numTelefone = user.numero || user.telefone || '';
-            const emailUser = user.email || user.correio || '';
-            const nomeUser = user.nome || '';
-
-            const { value: formValues } = await Swal.fire({
-                title: 'Editar Cliente',
-                html: `
-                    <div style="text-align: left; font-size: 0.85rem; color:#64748B; margin-bottom: 5px;">Nome Completo:</div>
-                    <input id="swal-nome" class="swal2-input" placeholder="Nome do Cliente" value="${nomeUser}" style="margin-top: 0; width:100%;">
-                    
-                    <div style="text-align: left; font-size: 0.85rem; color:#64748B; margin-top: 15px; margin-bottom: 5px;">Email:</div>
-                    <input id="swal-email" class="swal2-input" placeholder="exemplo@email.com" value="${emailUser}" style="margin-top: 0; width:100%;">
-
-                    <div style="text-align: left; font-size: 0.85rem; color:#64748B; margin-top: 15px; margin-bottom: 5px;">Telefone:</div>
-                    <input id="swal-tel" class="swal2-input" placeholder="Ex: 84..." value="${numTelefone}" style="margin-top: 0; width:100%;">
-                `,
-                focusConfirm: false,
-                showCancelButton: true,
-                confirmButtonText: 'Salvar Alterações',
-                cancelButtonText: 'Cancelar',
-                preConfirm: () => {
-                    return {
-                        nome: document.getElementById('swal-nome').value,
-                        email: document.getElementById('swal-email').value,
-                        telefone: document.getElementById('swal-tel').value
-                    }
-                }
-            });
-
-            if (formValues) {
-                Swal.fire({ title: 'A guardar...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-                try {
-                    const dadosAtualizar = { nome: formValues.nome };
-                    
-                    if ('numero' in user) dadosAtualizar.numero = formValues.telefone;
-                    if ('telefone' in user) dadosAtualizar.telefone = formValues.telefone;
-                    if ('email' in user || !user.correio) dadosAtualizar.email = formValues.email;
-                    if ('correio' in user) dadosAtualizar.correio = formValues.email;
-
-                    const { error } = await supabaseClient
-                        .from('Utilizadores')
-                        .update(dadosAtualizar) 
-                        .eq('id', user.id); 
-                        
-                    if (error) throw error;
-                    Swal.fire('Sucesso!', 'Dados do cliente foram atualizados.', 'success');
-                    carregarUsuarios();
-                } catch(err) {
-                    Swal.fire('Erro', 'Falha ao atualizar dados: ' + (err.message || 'Verifique a ligação.'), 'error');
-                    console.error(err);
-                }
-            }
-        }
-
-        function exportarCSV() {
-            if(todosUsuarios.length === 0) return Swal.fire('Aviso', 'Não há dados para exportar.', 'info');
-            
-            let csv = 'ID,Nome,Email,Telefone,Data Registo,Status Pesados,Status Mecânica\n';
-            
-            todosUsuarios.forEach(u => {
-                const tel = u.numero || u.telefone || '';
-                const email = u.email || u.correio || '';
-                const nome = u.nome ? u.nome.replace(/,/g, ' ') : '';
-                const dataCriacao = u.created_at ? formatarData(u.created_at) : '';
-                const pesados = (u.assinatura_pesados && new Date(u.assinatura_pesados) > new Date()) ? 'Ativo' : 'Inativo';
-                const mecanica = (u.assinatura_mecanica && new Date(u.assinatura_mecanica) > new Date()) ? 'Ativo' : 'Inativo';
-                
-                csv += `"${u.id}","${nome}","${email}","${tel}","${dataCriacao}","${pesados}","${mecanica}"\n`;
-            });
-            
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('hidden', '');
-            a.setAttribute('href', url);
-            a.setAttribute('download', `Clientes_CartaMestre_${new Date().toLocaleDateString()}.csv`);
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
-
-        async function cancelarAssinatura(userId, tipoPlano) {
-            const titulo = tipoPlano === 'pesados' ? 'Suspender Fatura de Pesados' : 'Suspender Fatura de Mecânica';
-            
-            const { value: mensagem } = await Swal.fire({
-                title: titulo,
-                input: 'textarea',
-                inputLabel: 'Escreva o motivo da suspensão:',
-                inputPlaceholder: 'Ex: Fatura rejeitada ou pagamento não confirmado.',
-                showCancelButton: true,
-                confirmButtonColor: '#DC2626',
-                cancelButtonText: 'Voltar',
-                confirmButtonText: 'Suspender Acesso'
-            });
-
-            if (mensagem) {
-                Swal.fire({ title: 'A processar...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-                try {
-                    const updateData = { mensagem_admin: mensagem };
-                    if (tipoPlano === 'pesados') updateData.assinatura_pesados = null;
-                    else updateData.assinatura_mecanica = null;
-
-                    const { error } = await supabaseClient.from('Utilizadores').update(updateData).eq('id', userId);
-                    if (error) throw error;
-
-                    Swal.fire('Suspenso!', 'O acesso ao módulo foi cortado e o aviso foi enviado.', 'success');
-                    carregarUsuarios();
-                } catch (error) {
-                    Swal.fire('Erro', 'Falha ao cancelar fatura.', 'error');
-                }
+                Swal.fire({ title: 'A apagar...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                await supabaseClient.from('Utilizadores').delete().eq('id', userId);
+                carregarUsuarios(); 
             }
         }
 
@@ -587,107 +338,71 @@
         function filtrarLista() {
             const termo = document.getElementById('searchInput').value.toLowerCase();
             const filtrados = todosUsuarios.filter(user => {
-                const txP = (user.id_transacao_pesados || user.id_transacao || '').toLowerCase();
-                const txM = (user.id_transacao_mecanica || user.id_transacao || '').toLowerCase();
+                const txP = (user.id_transacao_pesados || '').toLowerCase();
                 const tel = (user.numero || user.telefone || '').toLowerCase();
-                const email = (user.email || user.correio || '').toLowerCase();
                 const nome = (user.nome || '').toLowerCase();
                 
-                const atendeBusca = txP.includes(termo) || txM.includes(termo) || tel.includes(termo) || email.includes(termo) || nome.includes(termo);
+                const atendeBusca = txP.includes(termo) || tel.includes(termo) || nome.includes(termo);
                 
-                if (filtroAtual === 'faturas') {
-                    const temFatura = user.assinatura_pesados || user.assinatura_mecanica;
-                    return atendeBusca && temFatura;
-                }
+                const pesadosAtivo = user.assinatura_pesados && new Date(user.assinatura_pesados) > new Date();
+                const mecanicaAtiva = user.assinatura_mecanica && new Date(user.assinatura_mecanica) > new Date();
+                
+                const pesadosPendente = user.id_transacao_pesados && !pesadosAtivo;
+                const mecanicaPendente = user.id_transacao_mecanica && !mecanicaAtiva;
+
+                if (filtroAtual === 'faturas') return atendeBusca && (pesadosAtivo || mecanicaAtiva);
+                if (filtroAtual === 'pendentes') return atendeBusca && (pesadosPendente || mecanicaPendente);
                 return atendeBusca; 
             });
             renderizarLista(filtrados);
         }
 
+        function atualizarEstatisticas(usuarios) {
+            const agora = new Date();
+            let ativos = 0, pendentes = 0;
+            
+            usuarios.forEach(u => {
+                const pesadosAtivo = u.assinatura_pesados && new Date(u.assinatura_pesados) > agora;
+                const mecanicaAtiva = u.assinatura_mecanica && new Date(u.assinatura_mecanica) > agora;
+                
+                const pesadosPendente = u.id_transacao_pesados && !pesadosAtivo;
+                const mecanicaPendente = u.id_transacao_mecanica && !mecanicaAtiva;
+
+                if (pesadosAtivo || mecanicaAtiva) ativos++;
+                if ((pesadosPendente || mecanicaPendente) && !pesadosAtivo && !mecanicaAtiva) pendentes++;
+            });
+
+            document.getElementById('totalUsers').innerText = usuarios.length;
+            document.getElementById('activeUsers').innerText = ativos;
+            document.getElementById('pendingUsers').innerText = pendentes;
+            document.getElementById('countPendentes').innerText = pendentes;
+        }
+
         async function abrirMenuAprovar() {
             const { value: formValues } = await Swal.fire({
-                title: 'Aprovar / Dar Dias',
-                html:
-                    '<div style="text-align: left; font-size: 0.85rem; color:#64748B; margin-bottom: 5px;">Telefone do Cliente:</div>' +
-                    '<input id="swal-telefone" class="swal2-input" placeholder="Ex: 840000000" style="margin-top: 0;">' +
-                    '<div style="text-align: left; font-size: 0.85rem; color:#64748B; margin-top: 15px; margin-bottom: 5px;">Módulo:</div>' +
-                    '<select id="swal-modulo" class="swal2-select" style="width: 100%; max-width: 100%; margin-top: 0;">' +
-                        '<option value="pesados">Exames Pesados</option>' +
-                        '<option value="mecanica">Módulo Mecânica</option>' +
-                    '</select>' +
-                    '<div style="text-align: left; font-size: 0.85rem; color:#64748B; margin-top: 15px; margin-bottom: 5px;">Dias a Adicionar:</div>' +
-                    '<input id="swal-dias" type="number" class="swal2-input" placeholder="Ex: 30" style="margin-top: 0;">',
-                focusConfirm: false,
-                showCancelButton: true,
-                confirmButtonColor: '#10B981',
-                confirmButtonText: '<i class="fas fa-check-circle"></i> Aprovar Dias',
-                cancelButtonText: 'Cancelar',
-                preConfirm: () => {
-                    return [
-                        document.getElementById('swal-telefone').value,
-                        document.getElementById('swal-modulo').value,
-                        document.getElementById('swal-dias').value
-                    ]
-                }
+                title: 'Aprovação Manual',
+                html: '<input id="swal-telefone" class="swal2-input" placeholder="Nº de Telefone" style="margin-top:0"><select id="swal-modulo" class="swal2-select" style="width:100%;"><option value="pesados">Pesados</option></select><input id="swal-dias" type="number" class="swal2-input" placeholder="Dias (Ex: 30)">',
+                focusConfirm: false, showCancelButton: true, confirmButtonText: 'Aprovar',
+                preConfirm: () => [document.getElementById('swal-telefone').value, document.getElementById('swal-modulo').value, document.getElementById('swal-dias').value]
             });
 
             if (formValues) {
                 const [telefone, modulo, dias] = formValues;
-                if(!telefone || !dias) return Swal.fire('Erro', 'Preencha o telefone e a quantidade de dias.', 'warning');
-                processarAprovacaoManual(telefone, modulo, parseInt(dias));
-            }
-        }
-
-        async function processarAprovacaoManual(telefone, modulo, dias) {
-            Swal.fire({ title: 'A processar...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-
-            try {
-                const user = todosUsuarios.find(u => (u.numero && String(u.numero) === String(telefone)) || (u.telefone && String(u.telefone) === String(telefone)));
+                if(!telefone || !dias) return Swal.fire('Erro', 'Preencha o telefone e dias.', 'warning');
+                
+                Swal.fire({ title: 'A processar...', didOpen: () => Swal.showLoading() });
+                const user = todosUsuarios.find(u => (u.numero == telefone) || (u.telefone == telefone));
                 if (!user) return Swal.fire('Não Encontrado', 'Nenhum cliente registado com este número.', 'warning');
 
-                const hoje = new Date();
-                let dataBase = hoje;
-                const assinaturaAtual = modulo === 'pesados' ? user.assinatura_pesados : user.assinatura_mecanica;
+                const dataBase = new Date(); dataBase.setDate(dataBase.getDate() + parseInt(dias));
+                const updateData = { assinatura_pesados: dataBase.toISOString(), mensagem_admin: null };
                 
-                if (assinaturaAtual && new Date(assinaturaAtual) > hoje) {
-                    dataBase = new Date(assinaturaAtual);
-                }
-
-                dataBase.setDate(dataBase.getDate() + dias);
-                const novaDataISO = dataBase.toISOString();
-
-                const updateData = { mensagem_admin: null };
-                if (modulo === 'pesados') updateData.assinatura_pesados = novaDataISO;
-                else updateData.assinatura_mecanica = novaDataISO;
-
-                const { error } = await supabaseClient.from('Utilizadores').update(updateData).eq('id', user.id);
-                if (error) throw error;
-
-                Swal.fire('Sucesso!', `Adicionados ${dias} dias ao módulo de ${modulo} para o número ${telefone}.`, 'success');
+                await supabaseClient.from('Utilizadores').update(updateData).eq('id', user.id);
+                Swal.fire('Sucesso!', `Foram dados ${dias} dias.`, 'success');
                 carregarUsuarios(); 
-            } catch (error) {
-                Swal.fire('Erro', 'Falha ao processar aprovação: ' + (error.message || ''), 'error');
             }
         }
 
-        function formatarData(dataIso) {
-            if(!dataIso) return '';
-            const d = new Date(dataIso);
-            return `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth()+1).toString().padStart(2, '0')}/${d.getFullYear()} às ${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
-        }
-
-        function atualizarEstatisticas(usuarios) {
-            document.getElementById('totalUsers').innerText = usuarios.length;
-            const agora = new Date();
-            let totalAtivos = 0;
-            usuarios.forEach(u => {
-                if (u.assinatura_pesados && new Date(u.assinatura_pesados) > agora) totalAtivos++;
-                if (u.assinatura_mecanica && new Date(u.assinatura_mecanica) > agora) totalAtivos++;
-            });
-            document.getElementById('activeUsers').innerText = totalAtivos;
-        }
-
-        // Inicializar
         window.onload = carregarUsuarios;
     </script>
 </body>
