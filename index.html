@@ -29,6 +29,11 @@
         .tab-btn-pendentes { background: #F59E0B; color: white; }
         .tab-btn-pendentes.active { background: #D97706; }
         .tab-btn-approve { background: #10B981; color: white; }
+        
+        /* Novos botoes em massa */
+        .tab-btn-mail { background: #4F46E5; color: white; }
+        .tab-btn-sms { background: #16A34A; color: white; }
+        
         .tab-btn-refresh { background: #64748B; color: white; }
 
         .container { padding: 20px; max-width: 850px; margin: 0 auto; }
@@ -49,10 +54,14 @@
         .user-name { font-weight: 700; font-size: 1.1rem; color: #0F172A; display: flex; align-items: center; gap: 8px; }
         .user-detail { font-size: 0.9rem; color: #64748B; margin-top: 4px; display: flex; align-items: center; gap: 6px; }
         
-        .user-actions { display: flex; gap: 8px; }
+        .user-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-icon { width: 32px; height: 32px; border-radius: 8px; border: none; cursor: pointer; transition: 0.2s; font-size: 0.9rem; display: flex; align-items: center; justify-content: center;}
         .btn-edit { background: #F1F5F9; color: #475569; }
         .btn-delete { background: #FEE2E2; color: #DC2626; }
+        
+        /* Cores botoes acoes individuais */
+        .btn-mail { background: #E0E7FF; color: #4F46E5; }
+        .btn-sms { background: #DCFCE7; color: #16A34A; }
 
         .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
         .status-active { background: #DCFCE7; color: #166534; }
@@ -69,6 +78,7 @@
         .info-row { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed #E2E8F0; }
         .info-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .info-label { color: #64748B; font-weight: 500; }
+        .info-date { font-weight: 600; color: #0F172A; }
         .tx-id { font-family: monospace; background: #E2E8F0; padding: 2px 8px; border-radius: 6px; color: #0F172A; }
 
         .actions { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
@@ -95,6 +105,10 @@
             </button>
             <button class="tab-btn" onclick="filtrarPorMenu('faturas', this)"><i class="fas fa-check-circle"></i> Ativos</button>
             <button class="tab-btn tab-btn-approve" onclick="abrirMenuAprovar()"><i class="fas fa-plus-circle"></i> Manual</button>
+            
+            <button class="tab-btn tab-btn-mail" onclick="enviarEmailMassa()"><i class="fas fa-envelope-open-text"></i> Email Massa</button>
+            <button class="tab-btn tab-btn-sms" onclick="enviarSMSMassa()"><i class="fas fa-comment-sms"></i> SMS Massa</button>
+
             <button class="tab-btn tab-btn-refresh" onclick="carregarUsuarios()"><i class="fas fa-sync-alt"></i></button>
         </div>
     </div>
@@ -133,6 +147,19 @@
         let todosUsuarios = [];
         let filtroAtual = 'todos';
 
+        // Função para formatar as datas de modo Profissional
+        function formatarData(dataString) {
+            if (!dataString) return 'Data Indisponível';
+            const data = new Date(dataString);
+            return data.toLocaleDateString('pt-MZ', {
+                day: '2-digit', 
+                month: 'short', 
+                year: 'numeric', 
+                hour: '2-digit', 
+                minute: '2-digit'
+            }).replace(',', ' às');
+        }
+
         async function carregarUsuarios() {
             document.getElementById('usersList').innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin fa-2x"></i><br>A atualizar...</div>';
             try {
@@ -157,6 +184,8 @@
 
             usuarios.forEach(user => {
                 const agora = new Date();
+                const telefoneUser = user.numero || user.telefone || '';
+                const emailUser = user.email || '';
                 
                 // Estados (Pesados)
                 const pesadosAtivo = user.assinatura_pesados && new Date(user.assinatura_pesados) > agora;
@@ -178,6 +207,10 @@
                     htmlFaturas += `
                         <div class="invoice-section invoice-pendente">
                             <div class="invoice-title" style="color: #D97706;"><i class="fas fa-exclamation-circle"></i> Pesados - Aguarda Aprovação</div>
+                            <div class="info-row">
+                                <span class="info-label">Data e Hora</span>
+                                <span class="info-date">${formatarData(user.created_at)}</span>
+                            </div>
                             <div class="info-row">
                                 <span class="info-label">ID Transação</span>
                                 <span class="info-val tx-id">${user.id_transacao_pesados}</span>
@@ -210,6 +243,10 @@
                     htmlFaturas += `
                         <div class="invoice-section invoice-pendente">
                             <div class="invoice-title" style="color: #D97706;"><i class="fas fa-exclamation-circle"></i> Mecânica - Aguarda Aprovação</div>
+                            <div class="info-row">
+                                <span class="info-label">Data e Hora</span>
+                                <span class="info-date">${formatarData(user.created_at)}</span>
+                            </div>
                             <div class="info-row">
                                 <span class="info-label">ID Transação</span>
                                 <span class="info-val tx-id">${user.id_transacao_mecanica}</span>
@@ -245,11 +282,14 @@
                     <div class="user-header">
                         <div>
                             <div class="user-name">${user.nome || 'Cliente Anónimo'} ${badgeHtml}</div>
-                            <div class="user-detail"><i class="fas fa-phone-alt"></i> ${user.numero || user.telefone || 'S/N'}</div>
+                            <div class="user-detail"><i class="fas fa-phone-alt"></i> ${telefoneUser || 'S/N'}</div>
+                            ${emailUser ? `<div class="user-detail"><i class="fas fa-envelope"></i> ${emailUser}</div>` : ''}
                         </div>
                         <div class="user-actions">
-                            <button class="btn-icon btn-edit" onclick="editarUsuario('${user.id}')"><i class="fas fa-pen"></i></button>
-                            <button class="btn-icon btn-delete" onclick="eliminarUsuario('${user.id}')"><i class="fas fa-trash"></i></button>
+                            <button class="btn-icon btn-sms" onclick="window.location.href='sms:${telefoneUser}'" title="Enviar SMS"><i class="fas fa-sms"></i></button>
+                            <button class="btn-icon btn-mail" onclick="window.location.href='mailto:${emailUser}'" title="Enviar Email"><i class="fas fa-envelope"></i></button>
+                            <button class="btn-icon btn-edit" onclick="editarUsuario('${user.id}')" title="Editar"><i class="fas fa-pen"></i></button>
+                            <button class="btn-icon btn-delete" onclick="eliminarUsuario('${user.id}')" title="Eliminar"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
                     ${htmlFaturas}
@@ -258,7 +298,50 @@
             });
         }
 
-        // FUNÇÕES DE APROVAÇÃO / REJEIÇÃO (NOVO FLUXO)
+        // ================== AÇÕES EM MASSA (EMAIL / SMS) ==================
+        function enviarEmailMassa() {
+            // Pega apenas usuários que têm e-mail
+            const emails = todosUsuarios.map(u => u.email).filter(e => e && e.trim() !== "").join(',');
+            
+            if (!emails) {
+                return Swal.fire('Sem Emails', 'Nenhum utilizador registou o email na plataforma.', 'info');
+            }
+
+            // Usa BCC para não expor os emails a todos os clientes
+            window.location.href = `mailto:?bcc=${emails}`;
+        }
+
+        function enviarSMSMassa() {
+            // Pega apenas os utilizadores que têm número
+            const numeros = todosUsuarios.map(u => u.numero || u.telefone).filter(n => n && n.trim() !== "");
+            
+            if (numeros.length === 0) {
+                return Swal.fire('Sem Contactos', 'Nenhum utilizador registou o número de telefone.', 'info');
+            }
+
+            const numerosString = numeros.join(',');
+            
+            Swal.fire({
+                title: 'Enviar SMS em Massa',
+                html: `Encontramos <b>${numeros.length}</b> contactos válidos.<br><br>Pode abrir a sua App de Mensagens (se estiver no telemóvel) ou apenas copiar os números.`,
+                icon: 'question',
+                showCancelButton: true,
+                showDenyButton: true,
+                confirmButtonText: '<i class="fas fa-sms"></i> Abrir App SMS',
+                denyButtonText: '<i class="fas fa-copy"></i> Copiar Números',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = `sms:${numerosString}`;
+                } else if (result.isDenied) {
+                    navigator.clipboard.writeText(numerosString).then(() => {
+                        Swal.fire('Copiado!', 'Todos os números foram copiados! Agora pode colar no seu serviço de envio de SMS.', 'success');
+                    });
+                }
+            });
+        }
+        // ====================================================================
+
         async function aprovarPendente(userId, modulo, dias) {
             Swal.fire({ title: 'A processar aprovação...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             try {
