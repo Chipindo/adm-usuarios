@@ -223,10 +223,14 @@
                         </div>
                     `;
                 } else if (pesadosAtivo) {
-                    // BLOCO PESADOS ATIVO
+                    // BLOCO PESADOS ATIVO (COM DATAS ADICIONADAS)
                     htmlFaturas += `
                         <div class="invoice-section invoice-pesados">
                             <div class="invoice-title" style="color: #1D4ED8;"><i class="fas fa-truck-moving"></i> Exames Pesados (Ativo)</div>
+                            <div class="info-row">
+                                <span class="info-label">Expira a:</span>
+                                <span class="info-date" style="color: #10B981;"><i class="far fa-calendar-alt"></i> ${formatarData(user.assinatura_pesados)}</span>
+                            </div>
                             <div class="info-row">
                                 <span class="info-label">ID Transação</span>
                                 <span class="info-val tx-id">${user.id_transacao_pesados || 'Manual'}</span>
@@ -259,10 +263,18 @@
                         </div>
                     `;
                 } else if (mecanicaAtiva) {
-                    // BLOCO MECÂNICA ATIVO
+                    // BLOCO MECÂNICA ATIVO (COM DATAS ADICIONADAS)
                     htmlFaturas += `
                         <div class="invoice-section invoice-mecanica">
                             <div class="invoice-title" style="color: #C2410C;"><i class="fas fa-cogs"></i> Mecânica (Ativo)</div>
+                            <div class="info-row">
+                                <span class="info-label">Expira a:</span>
+                                <span class="info-date" style="color: #10B981;"><i class="far fa-calendar-alt"></i> ${formatarData(user.assinatura_mecanica)}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">ID Transação</span>
+                                <span class="info-val tx-id">${user.id_transacao_mecanica || 'Manual'}</span>
+                            </div>
                             <div class="actions">
                                 <button class="btn btn-cancel" style="background:#FFF7ED; color:#EA580C; border-color:#FED7AA;" onclick="suspenderAssinatura('${user.id}', 'mecanica')"><i class="fas fa-ban"></i> Suspender</button>
                             </div>
@@ -300,19 +312,15 @@
 
         // ================== AÇÕES EM MASSA (EMAIL / SMS) ==================
         function enviarEmailMassa() {
-            // Pega apenas usuários que têm e-mail
             const emails = todosUsuarios.map(u => u.email).filter(e => e && e.trim() !== "").join(',');
             
             if (!emails) {
                 return Swal.fire('Sem Emails', 'Nenhum utilizador registou o email na plataforma.', 'info');
             }
-
-            // Usa BCC para não expor os emails a todos os clientes
             window.location.href = `mailto:?bcc=${emails}`;
         }
 
         function enviarSMSMassa() {
-            // Pega apenas os utilizadores que têm número
             const numeros = todosUsuarios.map(u => u.numero || u.telefone).filter(n => n && n.trim() !== "");
             
             if (numeros.length === 0) {
@@ -461,27 +469,54 @@
             document.getElementById('countPendentes').innerText = pendentes;
         }
 
+        // ================== APROVAÇÃO MANUAL ATUALIZADA ==================
         async function abrirMenuAprovar() {
             const { value: formValues } = await Swal.fire({
                 title: 'Aprovação Manual',
-                html: '<input id="swal-telefone" class="swal2-input" placeholder="Nº de Telefone" style="margin-top:0"><select id="swal-modulo" class="swal2-select" style="width:100%;"><option value="pesados">Pesados</option></select><input id="swal-dias" type="number" class="swal2-input" placeholder="Dias (Ex: 30)">',
-                focusConfirm: false, showCancelButton: true, confirmButtonText: 'Aprovar',
-                preConfirm: () => [document.getElementById('swal-telefone').value, document.getElementById('swal-modulo').value, document.getElementById('swal-dias').value]
+                html: `
+                    <input id="swal-telefone" type="text" class="swal2-input" placeholder="Nº de Telefone" style="margin-top:0">
+                    <select id="swal-modulo" class="swal2-select" style="width: 73%; margin: 15px auto; font-size: 1rem; cursor: pointer;">
+                        <option value="pesados">Módulo de Pesados</option>
+                        <option value="mecanica">Módulo de Mecânica</option>
+                    </select>
+                    <input id="swal-dias" type="number" class="swal2-input" placeholder="Dias (Ex: 30)">
+                `,
+                focusConfirm: false, 
+                showCancelButton: true, 
+                confirmButtonText: '<i class="fas fa-check"></i> Aprovar',
+                cancelButtonText: 'Cancelar',
+                preConfirm: () => [
+                    document.getElementById('swal-telefone').value, 
+                    document.getElementById('swal-modulo').value, 
+                    document.getElementById('swal-dias').value
+                ]
             });
 
             if (formValues) {
                 const [telefone, modulo, dias] = formValues;
-                if(!telefone || !dias) return Swal.fire('Erro', 'Preencha o telefone e dias.', 'warning');
+                if(!telefone || !dias) return Swal.fire('Erro', 'Preencha o telefone e a quantidade de dias.', 'warning');
                 
-                Swal.fire({ title: 'A processar...', didOpen: () => Swal.showLoading() });
+                Swal.fire({ title: 'A processar...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                 const user = todosUsuarios.find(u => (u.numero == telefone) || (u.telefone == telefone));
-                if (!user) return Swal.fire('Não Encontrado', 'Nenhum cliente registado com este número.', 'warning');
+                
+                if (!user) return Swal.fire('Não Encontrado', 'Nenhum cliente registado com este número na plataforma.', 'warning');
 
-                const dataBase = new Date(); dataBase.setDate(dataBase.getDate() + parseInt(dias));
-                const updateData = { assinatura_pesados: dataBase.toISOString(), mensagem_admin: null };
+                const dataBase = new Date(); 
+                dataBase.setDate(dataBase.getDate() + parseInt(dias));
+                
+                const updateData = { mensagem_admin: null };
+                
+                // Distribui os dias para o módulo selecionado
+                if (modulo === 'pesados') {
+                    updateData.assinatura_pesados = dataBase.toISOString();
+                } else if (modulo === 'mecanica') {
+                    updateData.assinatura_mecanica = dataBase.toISOString();
+                }
                 
                 await supabaseClient.from('Utilizadores').update(updateData).eq('id', user.id);
-                Swal.fire('Sucesso!', `Foram dados ${dias} dias.`, 'success');
+                
+                const nomeModulo = modulo === 'pesados' ? 'Pesados' : 'Mecânica';
+                Swal.fire('Sucesso!', `Foram adicionados ${dias} dias ao módulo de <b>${nomeModulo}</b>.`, 'success');
                 carregarUsuarios(); 
             }
         }
