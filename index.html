@@ -30,9 +30,12 @@
         .tab-btn-pendentes.active { background: #D97706; }
         .tab-btn-approve { background: #10B981; color: white; }
         
-        /* Novos botoes em massa */
+        /* Botões em massa e limpeza */
         .tab-btn-mail { background: #4F46E5; color: white; }
         .tab-btn-sms { background: #16A34A; color: white; }
+        .tab-btn-mail-off { background: #6366F1; color: white; }
+        .tab-btn-sms-off { background: #22C55E; color: white; }
+        .tab-btn-clean { background: #EF4444; color: white; }
         
         .tab-btn-refresh { background: #64748B; color: white; }
 
@@ -59,7 +62,6 @@
         .btn-edit { background: #F1F5F9; color: #475569; }
         .btn-delete { background: #FEE2E2; color: #DC2626; }
         
-        /* Cores botoes acoes individuais */
         .btn-mail { background: #E0E7FF; color: #4F46E5; }
         .btn-sms { background: #DCFCE7; color: #16A34A; }
 
@@ -106,8 +108,14 @@
             <button class="tab-btn" onclick="filtrarPorMenu('faturas', this)"><i class="fas fa-check-circle"></i> Ativos</button>
             <button class="tab-btn tab-btn-approve" onclick="abrirMenuAprovar()"><i class="fas fa-plus-circle"></i> Manual</button>
             
-            <button class="tab-btn tab-btn-mail" onclick="enviarEmailMassa()"><i class="fas fa-envelope-open-text"></i> Email Massa</button>
-            <button class="tab-btn tab-btn-sms" onclick="enviarSMSMassa()"><i class="fas fa-comment-sms"></i> SMS Massa</button>
+            <button class="tab-btn tab-btn-mail" onclick="enviarEmailMassa()"><i class="fas fa-envelope-open-text"></i> Email (Todos)</button>
+            <button class="tab-btn tab-btn-sms" onclick="enviarSMSMassa()"><i class="fas fa-comment-sms"></i> SMS (Todos)</button>
+
+            <button class="tab-btn tab-btn-mail-off" onclick="enviarEmailMassaSemAssinatura()"><i class="fas fa-envelope"></i> Email (Sem Subs)</button>
+            <button class="tab-btn tab-btn-sms-off" onclick="enviarSMSMassaSemAssinatura()"><i class="fas fa-sms"></i> SMS (Sem Subs)</button>
+
+            <!-- Botão para limpar IDs de transações antigas/órfãs de assinaturas já expiradas -->
+            <button class="tab-btn tab-btn-clean" onclick="limparFaturasAntigas()"><i class="fas fa-broom"></i> Limpar Antigas</button>
 
             <button class="tab-btn tab-btn-refresh" onclick="carregarUsuarios()"><i class="fas fa-sync-alt"></i></button>
         </div>
@@ -147,7 +155,6 @@
         let todosUsuarios = [];
         let filtroAtual = 'todos';
 
-        // Função para formatar as datas de modo Profissional
         function formatarData(dataString) {
             if (!dataString) return 'Data Indisponível';
             const data = new Date(dataString);
@@ -187,11 +194,9 @@
                 const telefoneUser = user.numero || user.telefone || '';
                 const emailUser = user.email || '';
                 
-                // Estados (Pesados)
                 const pesadosAtivo = user.assinatura_pesados && new Date(user.assinatura_pesados) > agora;
                 const pesadosPendente = user.id_transacao_pesados && !pesadosAtivo;
                 
-                // Estados (Mecânica)
                 const mecanicaAtiva = user.assinatura_mecanica && new Date(user.assinatura_mecanica) > agora;
                 const mecanicaPendente = user.id_transacao_mecanica && !mecanicaAtiva;
 
@@ -202,7 +207,6 @@
                 
                 let htmlFaturas = '';
 
-                // BLOCO PESADOS PENDENTE
                 if (pesadosPendente) {
                     htmlFaturas += `
                         <div class="invoice-section invoice-pendente">
@@ -223,7 +227,6 @@
                         </div>
                     `;
                 } else if (pesadosAtivo) {
-                    // BLOCO PESADOS ATIVO (COM DATAS ADICIONADAS)
                     htmlFaturas += `
                         <div class="invoice-section invoice-pesados">
                             <div class="invoice-title" style="color: #1D4ED8;"><i class="fas fa-truck-moving"></i> Exames Pesados (Ativo)</div>
@@ -242,7 +245,6 @@
                     `;
                 }
 
-                // BLOCO MECÂNICA PENDENTE
                 if (mecanicaPendente) {
                     htmlFaturas += `
                         <div class="invoice-section invoice-pendente">
@@ -263,7 +265,6 @@
                         </div>
                     `;
                 } else if (mecanicaAtiva) {
-                    // BLOCO MECÂNICA ATIVO (COM DATAS ADICIONADAS)
                     htmlFaturas += `
                         <div class="invoice-section invoice-mecanica">
                             <div class="invoice-title" style="color: #C2410C;"><i class="fas fa-cogs"></i> Mecânica (Ativo)</div>
@@ -310,28 +311,69 @@
             });
         }
 
-        // ================== AÇÕES EM MASSA (EMAIL / SMS) ==================
+        // ================== FUNÇÃO DE LIMPEZA DE FATURAS ANTIGAS ==================
+        async function limparFaturasAntigas() {
+            const confirm = await Swal.fire({
+                title: 'Limpar Transações Antigas?',
+                text: 'Isto vai remover os IDs de transação antigos de utilizadores cujas assinaturas já expiraram, limpando a lista de pendentes indevidamente.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#EF4444',
+                confirmButtonText: 'Sim, Limpar Agora',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (confirm.isConfirmed) {
+                Swal.fire({ title: 'A limpar registos...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                try {
+                    const agora = new Date();
+                    let alterados = 0;
+
+                    for (let user of todosUsuarios) {
+                        let updateData = {};
+                        let precisa = false;
+
+                        const pesadosAtivo = user.assinatura_pesados && new Date(user.assinatura_pesados) > agora;
+                        if (user.id_transacao_pesados && !pesadosAtivo) {
+                            updateData.id_transacao_pesados = null;
+                            precisa = true;
+                        }
+
+                        const mecanicaAtiva = user.assinatura_mecanica && new Date(user.assinatura_mecanica) > agora;
+                        if (user.id_transacao_mecanica && !mecanicaAtiva) {
+                            updateData.id_transacao_mecanica = null;
+                            precisa = true;
+                        }
+
+                        if (precisa) {
+                            await supabaseClient.from('Utilizadores').update(updateData).eq('id', user.id);
+                            alterados++;
+                        }
+                    }
+
+                    Swal.fire('Concluído!', `${alterados} utilizadores foram limpos e saíram dos pendentes.`, 'success');
+                    carregarUsuarios();
+                } catch (error) {
+                    Swal.fire('Erro', 'Ocorreu um erro ao limpar as faturas antigas.', 'error');
+                }
+            }
+        }
+        // ==========================================================================
+
         function enviarEmailMassa() {
             const emails = todosUsuarios.map(u => u.email).filter(e => e && e.trim() !== "").join(',');
-            
-            if (!emails) {
-                return Swal.fire('Sem Emails', 'Nenhum utilizador registou o email na plataforma.', 'info');
-            }
+            if (!emails) return Swal.fire('Sem Emails', 'Nenhum utilizador registou o email na plataforma.', 'info');
             window.location.href = `mailto:?bcc=${emails}`;
         }
 
         function enviarSMSMassa() {
             const numeros = todosUsuarios.map(u => u.numero || u.telefone).filter(n => n && n.trim() !== "");
-            
-            if (numeros.length === 0) {
-                return Swal.fire('Sem Contactos', 'Nenhum utilizador registou o número de telefone.', 'info');
-            }
-
+            if (numeros.length === 0) return Swal.fire('Sem Contactos', 'Nenhum utilizador registou o número de telefone.', 'info');
             const numerosString = numeros.join(',');
             
             Swal.fire({
                 title: 'Enviar SMS em Massa',
-                html: `Encontramos <b>${numeros.length}</b> contactos válidos.<br><br>Pode abrir a sua App de Mensagens (se estiver no telemóvel) ou apenas copiar os números.`,
+                html: `Encontramos <b>${numeros.length}</b> contactos válidos.`,
                 icon: 'question',
                 showCancelButton: true,
                 showDenyButton: true,
@@ -339,16 +381,56 @@
                 denyButtonText: '<i class="fas fa-copy"></i> Copiar Números',
                 cancelButtonText: 'Cancelar'
             }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = `sms:${numerosString}`;
-                } else if (result.isDenied) {
+                if (result.isConfirmed) window.location.href = `sms:${numerosString}`;
+                else if (result.isDenied) {
                     navigator.clipboard.writeText(numerosString).then(() => {
-                        Swal.fire('Copiado!', 'Todos os números foram copiados! Agora pode colar no seu serviço de envio de SMS.', 'success');
+                        Swal.fire('Copiado!', 'Números copiados com sucesso!', 'success');
                     });
                 }
             });
         }
-        // ====================================================================
+
+        function enviarEmailMassaSemAssinatura() {
+            const agora = new Date();
+            const semAssinatura = todosUsuarios.filter(u => {
+                const pesadosAtivo = u.assinatura_pesados && new Date(u.assinatura_pesados) > agora;
+                const mecanicaAtiva = u.assinatura_mecanica && new Date(u.assinatura_mecanica) > agora;
+                return !pesadosAtivo && !mecanicaAtiva;
+            });
+            const emails = semAssinatura.map(u => u.email).filter(e => e && e.trim() !== "").join(',');
+            if (!emails) return Swal.fire('Sem Emails', 'Nenhum utilizador sem assinatura registou o email.', 'info');
+            window.location.href = `mailto:?bcc=${emails}`;
+        }
+
+        function enviarSMSMassaSemAssinatura() {
+            const agora = new Date();
+            const semAssinatura = todosUsuarios.filter(u => {
+                const pesadosAtivo = u.assinatura_pesados && new Date(u.assinatura_pesados) > agora;
+                const mecanicaAtiva = u.assinatura_mecanica && new Date(u.assinatura_mecanica) > agora;
+                return !pesadosAtivo && !mecanicaAtiva;
+            });
+            const numeros = semAssinatura.map(u => u.numero || u.telefone).filter(n => n && n.trim() !== "");
+            if (numeros.length === 0) return Swal.fire('Sem Contactos', 'Nenhum utilizador sem assinatura registou o número.', 'info');
+            const numerosString = numeros.join(',');
+            
+            Swal.fire({
+                title: 'SMS em Massa (Sem Assinatura)',
+                html: `Encontramos <b>${numeros.length}</b> contactos sem assinatura ativa.`,
+                icon: 'question',
+                showCancelButton: true,
+                showDenyButton: true,
+                confirmButtonText: '<i class="fas fa-sms"></i> Abrir App SMS',
+                denyButtonText: '<i class="fas fa-copy"></i> Copiar Números',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) window.location.href = `sms:${numerosString}`;
+                else if (result.isDenied) {
+                    navigator.clipboard.writeText(numerosString).then(() => {
+                        Swal.fire('Copiado!', 'Números copiados com sucesso!', 'success');
+                    });
+                }
+            });
+        }
 
         async function aprovarPendente(userId, modulo, dias) {
             Swal.fire({ title: 'A processar aprovação...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
@@ -358,11 +440,15 @@
                 const expDateISO = dataBase.toISOString();
 
                 const updateData = { mensagem_admin: null };
-                if (modulo === 'pesados') updateData.assinatura_pesados = expDateISO;
-                else updateData.assinatura_mecanica = expDateISO;
+                if (modulo === 'pesados') {
+                    updateData.assinatura_pesados = expDateISO;
+                    updateData.id_transacao_pesados = null;
+                } else {
+                    updateData.assinatura_mecanica = expDateISO;
+                    updateData.id_transacao_mecanica = null;
+                }
 
                 await supabaseClient.from('Utilizadores').update(updateData).eq('id', userId);
-                
                 Swal.fire('Aprovado!', `O cliente recebeu acesso por ${dias} dias.`, 'success');
                 carregarUsuarios();
             } catch (error) {
@@ -378,7 +464,7 @@
                 inputPlaceholder: 'Ex: O ID fornecido não é válido.',
                 showCancelButton: true,
                 confirmButtonColor: '#DC2626',
-                confirmButtonText: 'Rejeitar Pagamento'
+                confirmButtonText: 'Rejeitar'
             });
 
             if (motivo) {
@@ -457,7 +543,7 @@
                 const mecanicaAtiva = u.assinatura_mecanica && new Date(u.assinatura_mecanica) > agora;
                 
                 const pesadosPendente = u.id_transacao_pesados && !pesadosAtivo;
-                const mecanicaPendente = u.id_transacao_mecanica && !mecanicaAtiva;
+                const mecanicaPendente = user_has_pending = u.id_transacao_mecanica && !mecanicaAtiva;
 
                 if (pesadosAtivo || mecanicaAtiva) ativos++;
                 if ((pesadosPendente || mecanicaPendente) && !pesadosAtivo && !mecanicaAtiva) pendentes++;
@@ -469,7 +555,6 @@
             document.getElementById('countPendentes').innerText = pendentes;
         }
 
-        // ================== APROVAÇÃO MANUAL ATUALIZADA ==================
         async function abrirMenuAprovar() {
             const { value: formValues } = await Swal.fire({
                 title: 'Aprovação Manual',
@@ -499,18 +584,18 @@
                 Swal.fire({ title: 'A processar...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                 const user = todosUsuarios.find(u => (u.numero == telefone) || (u.telefone == telefone));
                 
-                if (!user) return Swal.fire('Não Encontrado', 'Nenhum cliente registado com este número na plataforma.', 'warning');
+                if (!user) return Swal.fire('Não Encontrado', 'Nenhum cliente registado com este número.', 'warning');
 
                 const dataBase = new Date(); 
                 dataBase.setDate(dataBase.getDate() + parseInt(dias));
                 
                 const updateData = { mensagem_admin: null };
-                
-                // Distribui os dias para o módulo selecionado
                 if (modulo === 'pesados') {
                     updateData.assinatura_pesados = dataBase.toISOString();
+                    updateData.id_transacao_pesados = null;
                 } else if (modulo === 'mecanica') {
                     updateData.assinatura_mecanica = dataBase.toISOString();
+                    updateData.id_transacao_mecanica = null;
                 }
                 
                 await supabaseClient.from('Utilizadores').update(updateData).eq('id', user.id);
